@@ -27,12 +27,19 @@ const App = () => {
     ]
   }
 
+  const total = course.parts.reduce(function(sum, current) {
+    return sum += current.exercises;
+  }, 0);
+
+  console.log('reducer attempt =', total)
+
   return (
     <>
       <h1>{course.name}</h1>
       {course.parts.map(course => 
         <Course key={course.id} course={course} />
       )}
+      <p><strong>total of {total} exercises</strong></p>
     </>
   )
 }
