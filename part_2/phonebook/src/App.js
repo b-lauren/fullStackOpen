@@ -7,22 +7,25 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
   //new piece of state to store the user-submitted input
-  const [newName, setNewName] = useState('add someone')
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const personExists = persons.some(person => person.name === newName);
 
   const addPerson = (event) => {
     event.preventDefault()
-    const newNameObj = {
+    const newPersonObj = {
       name: newName,
+      number: newNumber,
       id: Math.random(),
     }
     //only add if person doesn't exist, if they do issue an alert
     if(personExists) {
       alert(`${newName} is already in the phonebook`)
     } else {
-      setPersons(persons.concat(newNameObj))
+      setPersons(persons.concat(newPersonObj))
       setNewName('')
+      setNewNumber('')
     }
   }
 
@@ -31,12 +34,19 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input type="number" value={newNumber} onChange={handleNumberChange}/>
         </div>
         <div>
           <button type="submit">add</button>
