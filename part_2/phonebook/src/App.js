@@ -6,7 +6,10 @@ const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
   ]) 
+  //new piece of state to store the user-submitted input
   const [newName, setNewName] = useState('add someone')
+
+  const personExists = persons.some(person => person.name === newName);
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -14,8 +17,13 @@ const App = () => {
       name: newName,
       id: Math.random(),
     }
-    setPersons(persons.concat(newNameObj))
-    setNewName('')
+    //only add if person doesn't exist, if they do issue an alert
+    if(personExists) {
+      alert(`${newName} is already in the phonebook`)
+    } else {
+      setPersons(persons.concat(newNameObj))
+      setNewName('')
+    }
   }
 
   //sychronises the changes made with the components state
