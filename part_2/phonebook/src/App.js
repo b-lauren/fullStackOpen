@@ -12,7 +12,7 @@ const App = () => {
   //new piece of state to store the user-submitted input
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
-  const [searchList, setSearchList] = useState('');
+  const [searchInput, setSearchInput] = useState('');
 
   const personExists = persons.some((person) => person.name === newName);
 
@@ -43,23 +43,17 @@ const App = () => {
   };
 
   const handleSearch = (event) => {
-    setSearchList(event.target.value);
+    setSearchInput(event.target.value);
+    const filteredResult = persons.filter((person) =>
+      person.name.includes(searchInput)
+    );
+    setPersons(filteredResult);
   };
-
-  // TODO: map over the persons array and filter it with the set search list??
-  // const filter = persons.includes(searchList);
-  // const filteredResult = persons.filter((person) => {
-  //   return person.name.includes('a');
-  // });
-
-  console.log(searchList);
-
-  //add if statement to decide if we should filter or just show persons list
 
   return (
     <div>
       <h2>Phonebook</h2>
-      Search phonebook: <input value={searchList} onChange={handleSearch} />
+      Search phonebook: <input value={searchInput} onChange={handleSearch} />
       <h3>Add New</h3>
       <form onSubmit={addPerson}>
         <div>
@@ -88,15 +82,3 @@ const App = () => {
 };
 
 export default App;
-
-// {searchList > 1
-//   ? persons
-//       .filter((person) => person.name.includes(searchList))
-//       .map((person) => (
-//         <p key={person.id}>
-//           {person.name} {person.number}
-//         </p>
-//       ))
-//   : persons.map((person) => (
-//     <Person person={person} key={person.name} />
-//     ))}
