@@ -79,17 +79,9 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {searchList > 1
-          ? persons
-              .filter((person) => person.name.includes(searchList))
-              .map((person) => (
-                <p key={person.id}>
-                  {person.name} {person.number}
-                </p>
-              ))
-          : persons.map((person) => (
-              <Person person={person} key={person.name} />
-            ))}
+        {persons.map((person) => (
+          <Person person={person} key={person.name} />
+        ))}
       </ul>
     </div>
   );
@@ -97,14 +89,14 @@ const App = () => {
 
 export default App;
 
-// {
-//   searchList > 1
-//     ? persons
-//         .filter((person) => person.name.includes(searchList))
-//         .map((person) => (
-//           <p key={person.id}>
-//             {person.name} {person.number}
-//           </p>
-//         ))
-//     : persons.map((person) => <Person person={person} key={person.name} />);
-// }
+// {searchList > 1
+//   ? persons
+//       .filter((person) => person.name.includes(searchList))
+//       .map((person) => (
+//         <p key={person.id}>
+//           {person.name} {person.number}
+//         </p>
+//       ))
+//   : persons.map((person) => (
+//     <Person person={person} key={person.name} />
+//     ))}
