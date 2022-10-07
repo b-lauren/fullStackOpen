@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Person } from './components/Person';
+import { PhonebookForm } from './components/PhonebookForm';
+import { Search } from './components/Search';
 
 const App = () => {
   //initialises the piece of state stored in persons
@@ -45,7 +47,7 @@ const App = () => {
   const handleSearch = (event) => {
     setSearchInput(event.target.value);
     const filteredResult = persons.filter((person) =>
-      person.name.includes(searchInput)
+      person.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setPersons(filteredResult);
   };
@@ -53,24 +55,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      Search phonebook: <input value={searchInput} onChange={handleSearch} />
+      <Search value={searchInput} onChange={handleSearch} />
       <h3>Add New</h3>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number:{' '}
-          <input
-            type="number"
-            value={newNumber}
-            onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PhonebookForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
       <h2>Numbers</h2>
       <ul>
         {persons.map((person) => (
