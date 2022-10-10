@@ -20,8 +20,26 @@ const Countries = ({ countries }) => {
   );
 };
 
+// countries component which receives the full list. Maps over the list and returns the countryList component
+// CountryList that renders the names and the buttons
+
+// Country single that receives 1 single country and displays the info
+
 const CountryList = ({ country }) => {
-  return <p>{country.name.common}</p>;
+  const [showCountry, setShowCountry] = useState(false);
+
+  const handleShowButton = () => {
+    setShowCountry(country);
+    setShowCountry(!showCountry);
+  };
+
+  return (
+    <div>
+      {country.name.common + ' '}
+      <button onClick={handleShowButton}>show</button>
+      {showCountry ? <CountrySingle country={country} /> : ''}
+    </div>
+  );
 };
 
 const CountrySingle = ({ country }) => {
