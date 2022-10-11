@@ -55,9 +55,33 @@ const CountrySingle = ({ country }) => {
         ))}
       </ul>
       <img alt="country flag" src={country.flags.png} />
+      <WeatherShow capital={country.capital} />
     </>
   );
 };
+
+const WeatherShow = ({ capital }) => {
+  const [weather, setWeather] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${process.env.REACT_APP_API_KEY}&units=metric`
+      )
+      .then((response) => {
+        setWeather(response.data);
+      });
+  }, [capital]);
+
+  console.log('weather', weather);
+  console.log('capital city', capital);
+
+  return <div>I am the weather component</div>;
+};
+
+// https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}&units=metric`
+// grab the city from the other API call and use it in the weather call
+//display all the relevant content and then look at how to render icons
 
 function App() {
   const [countries, setCountries] = useState([]);
