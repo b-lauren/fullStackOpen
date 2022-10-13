@@ -20,11 +20,6 @@ const Countries = ({ countries }) => {
   );
 };
 
-// countries component which receives the full list. Maps over the list and returns the countryList component
-// CountryList that renders the names and the buttons
-
-// Country single that receives 1 single country and displays the info
-
 const CountryList = ({ country }) => {
   const [showCountry, setShowCountry] = useState(false);
 
@@ -45,7 +40,7 @@ const CountryList = ({ country }) => {
 const CountrySingle = ({ country }) => {
   return (
     <>
-      <h2>{country.name.common}</h2>
+      <h1>{country.name.common}</h1>
       <p>Capital - {country.capital}</p>
       <p>Area - {country.area}</p>
       <p>Languages</p>
@@ -61,7 +56,9 @@ const CountrySingle = ({ country }) => {
 };
 
 const WeatherShow = ({ capital }) => {
-  const [weather, setWeather] = useState([]);
+  const [temperature, setTemperature] = useState(0);
+  const [wind, setWind] = useState(0);
+  const [icon, setIcon] = useState('');
 
   useEffect(() => {
     axios
@@ -69,19 +66,23 @@ const WeatherShow = ({ capital }) => {
         `https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${process.env.REACT_APP_API_KEY}&units=metric`
       )
       .then((response) => {
-        setWeather(response.data);
+        setTemperature(response.data.main.temp);
+        setWind(response.data.wind.speed);
+        setIcon(response.data.weather[0].icon);
       });
   }, [capital]);
 
-  console.log('weather', weather);
-  console.log('capital city', capital);
+  const url = `http://openweathermap.org/img/wn/${icon}@2x.png`;
 
-  return <div>I am the weather component</div>;
+  return (
+    <>
+      <h2>Weather in {capital}</h2>
+      <p>Temperature {temperature} Celcuis</p>
+      <img alt="weather icon" src={url} />
+      <p>Wind {wind}</p>
+    </>
+  );
 };
-
-// https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}&units=metric`
-// grab the city from the other API call and use it in the weather call
-//display all the relevant content and then look at how to render icons
 
 function App() {
   const [countries, setCountries] = useState([]);
