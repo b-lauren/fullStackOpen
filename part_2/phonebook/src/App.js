@@ -4,6 +4,8 @@ import { PhonebookForm } from './components/PhonebookForm';
 import { Search } from './components/Search';
 import axios from 'axios';
 
+// NEXT EXERCISE: Save the numbers that are added to the phone book to a backend server - follow course
+
 const App = () => {
   //initialises the piece of state stored in persons
   const [persons, setPersons] = useState([]);
@@ -29,6 +31,12 @@ const App = () => {
       number: newNumber,
       id: Math.random(),
     };
+    axios
+      .post('http://localhost:3001/persons', newPersonObj)
+      .then((response) => {
+        console.log(response);
+      });
+
     //only add if person doesn't exist, if they do issue an alert
     if (personExists) {
       alert(`${newName} is already in the phonebook`);
@@ -49,7 +57,8 @@ const App = () => {
   };
 
   const handleSearch = (event) => {
-    setSearchInput(event.target.value);
+    const value = event.target.value;
+    setSearchInput(value);
     const filteredResult = persons.filter((person) =>
       person.name.toLowerCase().includes(searchInput.toLowerCase())
     );
