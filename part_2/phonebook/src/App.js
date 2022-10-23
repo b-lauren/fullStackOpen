@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Person } from './components/Person';
 import { PhonebookForm } from './components/PhonebookForm';
 import { Search } from './components/Search';
-import axios from 'axios';
+import peopleService from './services/people';
 
 // NEXT EXERCISE: Save the numbers that are added to the phone book to a backend server - follow course
 
@@ -19,7 +19,7 @@ const App = () => {
 
   //fetching data from the server using the axios-library
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then((response) => {
+    peopleService.getAllPeople().then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -31,8 +31,9 @@ const App = () => {
       number: newNumber,
       id: Math.random(),
     };
-    axios
-      .post('http://localhost:3001/persons', newPersonObj)
+    peopleService
+      .addPerson(newPersonObj)
+      // .post('http://localhost:3001/persons', newPersonObj)
       .then((response) => {
         console.log(response);
       });
