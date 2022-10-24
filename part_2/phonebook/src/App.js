@@ -4,8 +4,6 @@ import { PhonebookForm } from './components/PhonebookForm';
 import { Search } from './components/Search';
 import peopleService from './services/people';
 
-// NEXT EXERCISE: Save the numbers that are added to the phone book to a backend server - follow course
-
 const App = () => {
   //initialises the piece of state stored in persons
   const [persons, setPersons] = useState([]);
@@ -37,6 +35,13 @@ const App = () => {
       .then((response) => {
         console.log(response);
       });
+
+    //move the whole of the delete function here
+    const deleteSomeone = (id) => {
+      peopleService.deletePerson(id).then((response) => {
+        console.log(response);
+      });
+    };
 
     //only add if person doesn't exist, if they do issue an alert
     if (personExists) {
