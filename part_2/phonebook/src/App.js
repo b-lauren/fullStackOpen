@@ -36,13 +36,6 @@ const App = () => {
         console.log(response);
       });
 
-    //move the whole of the delete function here
-    const deleteSomeone = (id) => {
-      peopleService.deletePerson(id).then((response) => {
-        console.log(response);
-      });
-    };
-
     //only add if person doesn't exist, if they do issue an alert
     if (personExists) {
       alert(`${newName} is already in the phonebook`);
@@ -62,6 +55,7 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
+  //restructure so that when a user clears search, it resets. Check the country exercise for this.
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchInput(value);
@@ -69,6 +63,14 @@ const App = () => {
       person.name.toLowerCase().includes(searchInput.toLowerCase())
     );
     setPersons(filteredResult);
+  };
+
+  const deleteSomeone = (id) => {
+    const answer = window.confirm('Do you really want to delete?');
+    if (answer) {
+      peopleService.deletePerson(id);
+      setPersons(persons.filter((n) => n.id !== id));
+    }
   };
 
   return (
@@ -86,7 +88,11 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {persons.map((person) => (
-          <Person person={person} key={person.name} />
+          <Person
+            person={person}
+            key={person.id}
+            handleClick={() => deleteSomeone(person.id)}
+          />
         ))}
       </ul>
     </div>
