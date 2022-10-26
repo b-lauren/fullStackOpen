@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Person } from './components/Person';
 import { PhonebookForm } from './components/PhonebookForm';
 import { Search } from './components/Search';
+import { Notification } from './components/Notification';
 import peopleService from './services/people';
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchInput, setSearchInput] = useState('');
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const personExists = persons.some((person) => person.name === newName);
 
@@ -45,6 +47,9 @@ const App = () => {
             setPersons(
               persons.map((n) => (n.name === newName ? updatedPerson : n))
             );
+          })
+          .catch((error) => {
+            console.log(error);
           });
         //catch the error?
         //reset setNewName and setNewNumber
@@ -55,8 +60,12 @@ const App = () => {
     } else {
       // .post('http://localhost:3001/persons', newPersonObj)
       peopleService.addPerson(newPersonObj).then((response) => {
-        console.log(response);
+        setSuccessMessage(`${newName} was added to the phonebook`);
       });
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
+
       setPersons(persons.concat(newPersonObj));
       setNewName('');
       setNewNumber('');
@@ -92,6 +101,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Search value={searchInput} onChange={handleSearch} />
       <h3>Add New</h3>
       <PhonebookForm
