@@ -22,24 +22,41 @@ const App = () => {
     });
   }, []);
 
-  const addPerson = (event) => {
+  const addPerson = (event, id) => {
     event.preventDefault();
     const newPersonObj = {
       name: newName,
       number: newNumber,
       id: Math.random(),
     };
-    peopleService
-      .addPerson(newPersonObj)
+
+    if (personExists) {
+      const response = window.confirm(
+        `${newName} is already in the phonebook. Replace the old number with a new one?`
+      );
+      if (response) {
+        //find person to update
+        const numberToChange = persons.find((n) => n.name === newName);
+        const changedNumber = { ...numberToChange, number: newNumber };
+        //call peopleService and update - pass in info
+        peopleService
+          .update(numberToChange.id, changedNumber)
+          .then((updatedPerson) => {
+            setPersons(
+              persons.map((n) => (n.name === newName ? updatedPerson : n))
+            );
+          });
+        //catch the error?
+        //reset setNewName and setNewNumber
+        setNewName('');
+        setNewNumber('');
+        console.log('id:', numberToChange.id);
+      }
+    } else {
       // .post('http://localhost:3001/persons', newPersonObj)
-      .then((response) => {
+      peopleService.addPerson(newPersonObj).then((response) => {
         console.log(response);
       });
-
-    //only add if person doesn't exist, if they do issue an alert
-    if (personExists) {
-      alert(`${newName} is already in the phonebook`);
-    } else {
       setPersons(persons.concat(newPersonObj));
       setNewName('');
       setNewNumber('');
@@ -55,7 +72,6 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
-  //restructure so that when a user clears search, it resets. Check the country exercise for this.
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchInput(value);
