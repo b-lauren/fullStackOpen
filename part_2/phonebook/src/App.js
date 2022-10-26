@@ -13,7 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchInput, setSearchInput] = useState('');
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   const personExists = persons.some((person) => person.name === newName);
 
@@ -40,7 +40,7 @@ const App = () => {
         //find person to update
         const numberToChange = persons.find((n) => n.name === newName);
         const changedNumber = { ...numberToChange, number: newNumber };
-        //call peopleService and update - pass in info
+        //call peopleService and update the number
         peopleService
           .update(numberToChange.id, changedNumber)
           .then((updatedPerson) => {
@@ -49,10 +49,11 @@ const App = () => {
             );
           })
           .catch((error) => {
-            console.log(error);
+            setNotification(`${newName} was already removed from server`);
           });
-        //catch the error?
-        //reset setNewName and setNewNumber
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
         setNewName('');
         setNewNumber('');
         console.log('id:', numberToChange.id);
@@ -60,10 +61,10 @@ const App = () => {
     } else {
       // .post('http://localhost:3001/persons', newPersonObj)
       peopleService.addPerson(newPersonObj).then((response) => {
-        setSuccessMessage(`${newName} was added to the phonebook`);
+        setNotification(`${newName} was added to the phonebook`);
       });
       setTimeout(() => {
-        setSuccessMessage(null);
+        setNotification(null);
       }, 5000);
 
       setPersons(persons.concat(newPersonObj));
@@ -101,7 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={notification} />
       <Search value={searchInput} onChange={handleSearch} />
       <h3>Add New</h3>
       <PhonebookForm

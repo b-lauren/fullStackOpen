@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Notification = ({ message }) => {
   const notificationStyling = {
-    color: 'green',
+    color: 'purple',
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',
