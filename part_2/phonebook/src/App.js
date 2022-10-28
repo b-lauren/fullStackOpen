@@ -5,6 +5,13 @@ import { Search } from './components/Search';
 import { Notification } from './components/Notification';
 import peopleService from './services/people';
 
+// const StyledNotifications = styled.div`
+//   color: 'blue';
+//   height: 10rem;
+//   width: 150px;
+//   background-color: pink;
+// `;
+
 const App = () => {
   //initialises the piece of state stored in persons
   const [persons, setPersons] = useState([]);
@@ -14,6 +21,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [notification, setNotification] = useState(null);
+  const [alertType, setAlertType] = useState('success');
 
   const personExists = persons.some((person) => person.name === newName);
 
@@ -50,6 +58,7 @@ const App = () => {
           })
           .catch((error) => {
             setNotification(`${newName} was already removed from server`);
+            setAlertType('error');
           });
         setTimeout(() => {
           setNotification(null);
@@ -62,10 +71,11 @@ const App = () => {
       // .post('http://localhost:3001/persons', newPersonObj)
       peopleService.addPerson(newPersonObj).then((response) => {
         setNotification(`${newName} was added to the phonebook`);
+        setAlertType('success');
       });
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
+      // setTimeout(() => {
+      //   setNotification(null);
+      // }, 5000);
 
       setPersons(persons.concat(newPersonObj));
       setNewName('');
@@ -102,7 +112,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification message={notification} alertType={alertType} />
+      {/* <StyledNotifications /> */}
       <Search value={searchInput} onChange={handleSearch} />
       <h3>Add New</h3>
       <PhonebookForm
