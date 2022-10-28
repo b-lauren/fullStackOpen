@@ -5,13 +5,6 @@ import { Search } from './components/Search';
 import { Notification } from './components/Notification';
 import peopleService from './services/people';
 
-// const StyledNotifications = styled.div`
-//   color: 'blue';
-//   height: 10rem;
-//   width: 150px;
-//   background-color: pink;
-// `;
-
 const App = () => {
   //initialises the piece of state stored in persons
   const [persons, setPersons] = useState([]);
@@ -24,6 +17,9 @@ const App = () => {
   const [alertType, setAlertType] = useState('success');
 
   const personExists = persons.some((person) => person.name === newName);
+  const filteredResult = persons.filter((person) =>
+    person.name.toLowerCase().includes(searchInput.toLowerCase())
+  );
 
   //fetching data from the server using the axios-library
   useEffect(() => {
@@ -56,13 +52,16 @@ const App = () => {
               persons.map((n) => (n.name === newName ? updatedPerson : n))
             );
           })
+
           .catch((error) => {
             setNotification(`${newName} was already removed from server`);
             setAlertType('error');
           });
+
         setTimeout(() => {
           setNotification(null);
         }, 5000);
+
         setNewName('');
         setNewNumber('');
         console.log('id:', numberToChange.id);
@@ -73,10 +72,9 @@ const App = () => {
         setNotification(`${newName} was added to the phonebook`);
         setAlertType('success');
       });
-      // setTimeout(() => {
-      //   setNotification(null);
-      // }, 5000);
-
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
       setPersons(persons.concat(newPersonObj));
       setNewName('');
       setNewNumber('');
@@ -95,9 +93,9 @@ const App = () => {
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchInput(value);
-    const filteredResult = persons.filter((person) =>
-      person.name.toLowerCase().includes(searchInput.toLowerCase())
-    );
+    // const filteredResult = persons.filter((person) =>
+    //   person.name.toLowerCase().includes(searchInput.toLowerCase())
+    // );
     setPersons(filteredResult);
   };
 
@@ -113,7 +111,6 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={notification} alertType={alertType} />
-      {/* <StyledNotifications /> */}
       <Search value={searchInput} onChange={handleSearch} />
       <h3>Add New</h3>
       <PhonebookForm
@@ -124,15 +121,13 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <ul>
-        {persons.map((person) => (
-          <Person
-            person={person}
-            key={person.id}
-            handleClick={() => deleteSomeone(person.id)}
-          />
-        ))}
-      </ul>
+      {persons.map((person) => (
+        <Person
+          person={person}
+          key={person.id}
+          handleClick={() => deleteSomeone(person.id)}
+        />
+      ))}
     </div>
   );
 };

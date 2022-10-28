@@ -1,7 +1,5 @@
 import React from 'react';
 
-// pass in the delete function here with some extra  - delete the above
-
 export const Person = ({ person, handleClick }) => {
   return (
     <li id={Math.random()}>
@@ -10,3 +8,29 @@ export const Person = ({ person, handleClick }) => {
     </li>
   );
 };
+
+// export const Persons = ({
+//   persons,
+//   handleClick,
+//   filteredResult,
+//   searchInput,
+// }) => {
+//   return (
+//     <>
+//       {searchInput
+//         ? filteredResult.map((person) => (
+//             <Person key={person.id} person={person} />
+//           ))
+//         : persons.map((person) => (
+//             <Person key={person.id} person={person} onClick={handleClick} />
+//           ))}
+//     </>
+//   );
+// };
+
+/* <Persons
+searchInput={searchInput}
+filteredResult={filteredResult}
+persons={persons}
+handleClick={() => deleteSomeone()}
+/> */

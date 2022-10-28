@@ -1,10 +1,8 @@
-/* eslint-disable no-mixed-operators */
 import React from 'react';
 import styled from 'styled-components';
 
 export const StyledNotifications = styled.div`
   color: ${(props) => (props.alertType === 'success' ? 'green' : 'red')};
-  background: lightgrey;
   font-size: 20px;
   border-style: solid;
   border-radius: 5px;
@@ -18,6 +16,5 @@ export const Notification = ({ message, alertType }) => {
   }
   return (
     <StyledNotifications alertType={alertType}>{message}</StyledNotifications>
-    // <div style={notificationStyling}>{message}</div>
   );
 };
