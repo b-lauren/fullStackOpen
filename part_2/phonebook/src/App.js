@@ -8,6 +8,7 @@ import peopleService from './services/people';
 const App = () => {
   //initialises the piece of state stored in persons
   const [persons, setPersons] = useState([]);
+  const [personsDisplayed, setPersonsDisplayed] = useState([]);
 
   //new piece of state to store the user-submitted input
   const [newName, setNewName] = useState('');
@@ -25,6 +26,7 @@ const App = () => {
   useEffect(() => {
     peopleService.getAllPeople().then((response) => {
       setPersons(response.data);
+      setPersonsDisplayed(response.data);
     });
   }, []);
 
@@ -48,9 +50,11 @@ const App = () => {
         peopleService
           .update(numberToChange.id, changedNumber)
           .then((updatedPerson) => {
-            setPersons(
-              persons.map((n) => (n.name === newName ? updatedPerson : n))
+            const listAdd = persons.map((n) =>
+              n.name === newName ? updatedPerson : n
             );
+            setPersons(listAdd);
+            setPersonsDisplayed(listAdd);
           })
 
           .catch((error) => {
@@ -75,7 +79,9 @@ const App = () => {
       setTimeout(() => {
         setNotification(null);
       }, 5000);
-      setPersons(persons.concat(newPersonObj));
+      const addSomeone = persons.concat(newPersonObj);
+      setPersons(addSomeone);
+      setPersonsDisplayed(addSomeone);
       setNewName('');
       setNewNumber('');
     }
@@ -93,17 +99,22 @@ const App = () => {
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchInput(value);
-    // const filteredResult = persons.filter((person) =>
-    //   person.name.toLowerCase().includes(searchInput.toLowerCase())
-    // );
-    setPersons(filteredResult);
+
+    if (value.length > 0) {
+      setPersonsDisplayed(filteredResult);
+    } else {
+      const everybody = persons.map((person) => person);
+      setPersonsDisplayed(everybody);
+    }
   };
 
   const deleteSomeone = (id) => {
     const answer = window.confirm('Do you really want to delete?');
     if (answer) {
       peopleService.deletePerson(id);
-      setPersons(persons.filter((n) => n.id !== id));
+      const listWithout = persons.filter((n) => n.id !== id);
+      setPersons(listWithout);
+      setPersonsDisplayed(listWithout);
     }
   };
 
@@ -121,7 +132,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      {persons.map((person) => (
+      {personsDisplayed.map((person) => (
         <Person
           person={person}
           key={person.id}
