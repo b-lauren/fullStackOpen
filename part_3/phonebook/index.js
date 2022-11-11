@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json())
 
 let persons = [
   {
@@ -62,6 +63,20 @@ app.delete('/api/persons/:id', (request, response) => {
 
   response.status(204).end()
 })
+
+//Add a resource
+
+app.post('/api/persons', (request, response) => {  
+  const randId = Math.random()*100
+  const person = request.body 
+  person.id = randId 
+  console.log(person)  
+
+  persons = persons.concat(person)
+  
+  response.json(person)
+})
+
 
 const PORT = 3001;
 app.listen(PORT);
