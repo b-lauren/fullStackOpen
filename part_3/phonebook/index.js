@@ -66,11 +66,26 @@ app.delete('/api/persons/:id', (request, response) => {
 
 //Add a resource
 
-app.post('/api/persons', (request, response) => {  
+app.post('/api/persons', (request, response) => { 
+  const body = request.body  
   const randId = Math.random()*100
   const person = request.body 
   person.id = randId 
-  console.log(person)  
+  console.log(person) 
+  
+  if (body.name === undefined || body.number === undefined) {
+    return response.status(400).json({
+      error: "name missing"
+    });
+  }
+
+  const existingPerson = persons.find(person => person.name === body.name)
+
+  if(existingPerson) {
+    return response.status(400).json({
+      error: "name must be unique"
+    })
+  }
 
   persons = persons.concat(person)
   
